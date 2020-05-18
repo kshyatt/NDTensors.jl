@@ -6,6 +6,19 @@ using StaticArrays
 using HDF5
 using Strided
 
+const devs = Ref{Vector{CUDAdrv.CuDevice}}()
+const dev_rows = Ref{Int}(0)
+const dev_cols = Ref{Int}(0)
+function __init__()
+  voltas    = filter(dev->occursin("V100", CUDAdrv.name(dev)), collect(CUDAdrv.devices()))
+  pascals    = filter(dev->occursin("P100", CUDAdrv.name(dev)), collect(CUDAdrv.devices()))
+  devs[] = voltas[1:1]
+  #devs[] = pascals[1:2]
+  CUBLASMG.cublasMgDeviceSelect(CUBLASMG.mg_handle(), length(devs[]), devs[])
+  dev_rows[] = 1
+  dev_cols[] = 1
+end
+
 #####################################
 # Exports
 #
