@@ -6,6 +6,7 @@ using StaticArrays
 using HDF5
 using Strided
 
+using CUDAdrv, CuArrays
 const devs = Ref{Vector{CUDAdrv.CuDevice}}()
 const dev_rows = Ref{Int}(0)
 const dev_cols = Ref{Int}(0)
